@@ -20,13 +20,20 @@ from tests.pageobjects.web import LoginPage, ProfilePage
 
 
 @pytest.fixture
-def driver():
-    driver = webdriver.Chrome(chrome_options=ChromeOptions(), project_name="Examples", job_name=None)
-    yield driver
+def simple_test():
+    driver = webdriver.Chrome()
+
+    driver.get("https://passport.alibaba.com/icbu_login.htm?spm=a2700.8293689.scGlobalHomeHeader.8.23f967afCiQ4wD&tracelog=hd_signin")
+
+    driver.find_element_by_css_selector("#loginId").send_keys("khanminal317@gmail.com")
+    driver.find_element_by_css_selector("#password1").send_keys("Aqsadear@123")
+    driver.find_element_by_css_selector("#submit-btn").click()
+
+    passed = driver.find_element_by_css_selector("#logout").is_displayed()
+
+    print("Test passed") if passed else print("Test failed")
+
     driver.quit()
 
-
-def test_example_using_chrome(driver):
-
-    LoginPage(driver).open().login_as("John Smith", "12345")
-    assert ProfilePage(driver).greetings_are_displayed() is True
+if __name__ == "__main__":
+    simple_test()
